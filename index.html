@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>One Shot - Order</title>
+    <link rel="stylesheet" href="./CSS/store.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+
+    <header>
+        <a href="#" class="logo">One<span>Shot</span></a>
+        <div class="cart-icon" onclick="toggleCart()">
+            <i class="fas fa-shopping-bag"></i>
+            <div class="badge" id="cartBadge">0</div>
+        </div>
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="search" placeholder="Search menu...">
+        </div>
+    </header>
+
+    <main>
+        <h1 class="title">Signature Menu</h1>
+        
+        <div class="category-tabs">
+            <button class="tab-btn active" onclick="filterCategory('all', this)">All</button>
+            <button class="tab-btn" onclick="filterCategory('food', this)">Food</button>
+            <button class="tab-btn" onclick="filterCategory('drinks', this)">Drinks</button>
+        </div>
+
+        <div class="grid" id="menuGrid"></div>
+    </main>
+
+    <div class="cart-overlay" id="overlay" onclick="toggleCart()"></div>
+    <div class="cart-panel" id="cartPanel">
+        <div class="cart-header">
+            <h2>Your Order</h2>
+            <i class="fas fa-times close-cart" onclick="toggleCart()"></i>
+        </div>
+        <div class="cart-items" id="cartBody"></div>
+        <div class="cart-footer">
+            <div class="total-row"><span>Total</span><span id="cartTotal">$0.00</span></div>
+            <button class="checkout-btn" onclick="checkout()">Place Order</button>
+        </div>
+    </div>
+
+    <script src="./js/store.js"></script>
+</body>
+</html>
