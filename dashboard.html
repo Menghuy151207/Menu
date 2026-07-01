@@ -18,7 +18,17 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
     import { getDatabase, ref, onValue, remove } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
 
-    const app = initializeApp(YOUR_FIREBASE_CONFIG_HERE);
+    const firebaseConfig = {
+  apiKey: "AIzaSyDJMI-adoL5fYq8Fdkb1uTimjoDmMYK_Dg",
+  authDomain: "food-menu-fd176.firebaseapp.com",
+  databaseURL: "https://food-menu-fd176-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "food-menu-fd176",
+  storageBucket: "food-menu-fd176.firebasestorage.app",
+  messagingSenderId: "575355197591",
+  appId: "1:575355197591:web:261ebf2437cdc32daef1d2",
+  measurementId: "G-XN9BRMWY0L"
+};
+    const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
     // Listen for real-time updates
