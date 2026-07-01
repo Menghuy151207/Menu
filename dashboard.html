@@ -14,6 +14,38 @@
     <div class="alert-banner" id="alertBanner">🚨 NEW ORDER RECEIVED!</div>
     <div class="orders-grid" id="ordersGrid"></div>
     
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+    import { getDatabase, ref, onValue, remove } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
+
+    const app = initializeApp(YOUR_FIREBASE_CONFIG_HERE);
+    const db = getDatabase(app);
+
+    // Listen for real-time updates
+    onValue(ref(db, 'orders/'), (snapshot) => {
+        const data = snapshot.val();
+        const grid = document.getElementById('ordersGrid');
+        grid.innerHTML = '';
+        
+        if (!data) return;
+
+        Object.keys(data).forEach(key => {
+            const order = data[key];
+            grid.innerHTML += `
+                <div class="order-card">
+                    <h3>${order.id}</h3>
+                    <p>${order.items.join(', ')}</p>
+                    <p>Total: ${order.total}</p>
+                    <button class="btn" onclick="deleteOrder('${key}')">Done</button>
+                </div>
+            `;
+        });
+    });
+
+    window.deleteOrder = function(key) {
+        remove(ref(db, 'orders/' + key));
+    };
+</script>
     <script src="./dashboard.js"></script>
 </body>
 </html>
