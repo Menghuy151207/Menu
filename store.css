@@ -265,10 +265,14 @@ main {
 .cart-panel {
     position: fixed; 
     top: 0; 
-    bottom: 0;
     right: -100%; 
     width: 100%; 
     max-width: 420px;
+    
+    /* THE FIX: Use Dynamic Viewport Height (dvh) so it respects the mobile browser bar */
+    height: 100%; /* Fallback for older phones */
+    height: 100dvh; /* Adjusts automatically on iOS/Safari */
+    
     background: var(--surface); 
     transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
     z-index: 1000; 
@@ -297,10 +301,11 @@ main {
 
 .cart-footer { 
     padding: 24px; 
-    /* This special variable protects the button from the iPhone home bar */
     padding-bottom: calc(24px + env(safe-area-inset-bottom)); 
     border-top: 1px solid var(--border); 
     background: var(--surface); 
+    /* THE FIX: Stop flexbox from squishing the footer out of frame */
+    flex-shrink: 0; 
 }
 .total-row { display: flex; justify-content: space-between; font-size: 1.4rem; font-weight: 800; margin-bottom: 20px; }
 .checkout-btn {
