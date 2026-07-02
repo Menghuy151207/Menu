@@ -11,7 +11,7 @@
 
     <header>
         <a href="#" class="logo">One<span>Shot</span></a>
-        <div class="cart-icon" onclick="toggleCart()">
+        <div class="cart-icon" onclick="window.toggleCart()">
             <i class="fas fa-shopping-bag"></i>
             <div class="badge" id="cartBadge">0</div>
         </div>
@@ -25,62 +25,27 @@
         <h1 class="title">Signature Menu</h1>
         
         <div class="category-tabs">
-            <button class="tab-btn active" onclick="filterCategory('all', this)">All</button>
-            <button class="tab-btn" onclick="filterCategory('food', this)">Food</button>
-            <button class="tab-btn" onclick="filterCategory('drinks', this)">Drinks</button>
+            <button class="tab-btn active" onclick="window.filterCategory('all', this)">All</button>
+            <button class="tab-btn" onclick="window.filterCategory('food', this)">Food</button>
+            <button class="tab-btn" onclick="window.filterCategory('drinks', this)">Drinks</button>
         </div>
 
         <div class="grid" id="menuGrid"></div>
     </main>
 
-    <div class="cart-overlay" id="overlay" onclick="toggleCart()"></div>
+    <div class="cart-overlay" id="overlay" onclick="window.toggleCart()"></div>
     <div class="cart-panel" id="cartPanel">
         <div class="cart-header">
             <h2>Your Order</h2>
-            <i class="fas fa-times close-cart" onclick="toggleCart()"></i>
+            <i class="fas fa-times close-cart" onclick="window.toggleCart()"></i>
         </div>
         <div class="cart-items" id="cartBody"></div>
         <div class="cart-footer">
             <div class="total-row"><span>Total</span><span id="cartTotal">$0.00</span></div>
-            <button class="checkout-btn" onclick="checkout()">Place Order</button>
+            <button class="checkout-btn" id="btnCheckout">Place Order</button>
         </div>
     </div>
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-    import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
-    
-    const firebaseConfig = {
-  apiKey: "AIzaSyDJMI-adoL5fYq8Fdkb1uTimjoDmMYK_Dg",
-  authDomain: "food-menu-fd176.firebaseapp.com",
-  databaseURL: "https://food-menu-fd176-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "food-menu-fd176",
-  storageBucket: "food-menu-fd176.firebasestorage.app",
-  messagingSenderId: "575355197591",
-  appId: "1:575355197591:web:261ebf2437cdc32daef1d2",
-  measurementId: "G-XN9BRMWY0L"
-};
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
 
-    window.checkout = function() {
-        if (cart.length === 0) return alert("Cart is empty!");
-        
-        const newOrder = {
-            id: "ORD-" + Math.floor(Math.random() * 10000),
-            items: cart.map(i => i.name),
-            total: document.getElementById('cartTotal').innerText,
-            time: new Date().toLocaleTimeString()
-        };
-
-        // Push to Firebase
-        push(ref(db, 'orders/'), newOrder).then(() => {
-            alert("Order sent to kitchen!");
-            cart = [];
-            updateCart();
-            toggleCart();
-        });
-    };
-</script>
-    <script src="./store.js"></script>
+    <script type="module" src="./store.js"></script>
 </body>
 </html>

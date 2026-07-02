@@ -2,60 +2,79 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>One Shot - Admin</title>
     <link rel="stylesheet" href="./dashboard.css">
 </head>
 <body>
+
+    <div id="loginOverlay" class="login-overlay">
+        <div class="login-box">
+            <h2>One<span>Shot</span> Login</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label style="color:var(--text-muted); display:block; margin-bottom:5px;">Email Address</label>
+                    <input type="email" id="adminEmail" placeholder="admin@oneshot.com" required>
+                </div>
+                <div class="form-group">
+                    <label style="color:var(--text-muted); display:block; margin-bottom:5px;">Password</label>
+                    <input type="password" id="adminPassword" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn-add">Access Dashboard</button>
+                <div id="loginError" class="login-error">Invalid email or password.</div>
+            </form>
+        </div>
+    </div>
+
     <header>
         <h1>One<span>Shot</span> Admin</h1>
-        <div class="live-status">● Live Orders</div>
+        <div style="display: flex; gap: 15px; align-items: center;">
+            <div class="live-status">● Live Orders</div>
+            <button id="btnLogout" style="background: transparent; border: 1px solid var(--text-muted); color: var(--text-main); padding: 6px 12px; border-radius: 6px; cursor: pointer;">Logout</button>
+        </div>
     </header>
-    <div class="alert-banner" id="alertBanner">🚨 NEW ORDER RECEIVED!</div>
-    <div class="orders-grid" id="ordersGrid"></div>
-    
-    <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-    import { getDatabase, ref, onValue, remove } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
 
-    const firebaseConfig = {
-  apiKey: "AIzaSyDJMI-adoL5fYq8Fdkb1uTimjoDmMYK_Dg",
-  authDomain: "food-menu-fd176.firebaseapp.com",
-  databaseURL: "https://food-menu-fd176-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "food-menu-fd176",
-  storageBucket: "food-menu-fd176.firebasestorage.app",
-  messagingSenderId: "575355197591",
-  appId: "1:575355197591:web:261ebf2437cdc32daef1d2",
-  measurementId: "G-XN9BRMWY0L"
-};
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
+    <div class="admin-controls">
+        <div class="stats-panel">
+            <h2>Today's Overview</h2>
+            <div class="stat-box">Pending Orders: <span id="pendingCount">0</span></div>
+            <div class="stat-box">Total Revenue: $<span id="revenueTotal">0.00</span></div>
+        </div>
 
-    // Listen for real-time updates
-    onValue(ref(db, 'orders/'), (snapshot) => {
-        const data = snapshot.val();
-        const grid = document.getElementById('ordersGrid');
-        grid.innerHTML = '';
-        
-        if (!data) return;
-
-        Object.keys(data).forEach(key => {
-            const order = data[key];
-            grid.innerHTML += `
-                <div class="order-card">
-                    <h3>${order.id}</h3>
-                    <p>${order.items.join(', ')}</p>
-                    <p>Total: ${order.total}</p>
-                    <button class="btn" onclick="deleteOrder('${key}')">Done</button>
+        <div class="menu-panel">
+            <h2>Add New Menu Item</h2>
+            <form id="addMenuForm">
+                <div class="form-group">
+                    <input type="text" id="itemName" placeholder="Item Name" required>
                 </div>
-            `;
-        });
-    });
+                <div class="form-group">
+                    <input type="number" id="itemPrice" placeholder="Price (e.g. 4.50)" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="itemImg" placeholder="Image URL (optional)">
+                </div>
+                <div class="form-group">
+                    <select id="itemCategory">
+                        <option value="drinks">Drinks</option>
+                        <option value="food">Food</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-add">Add to Database</button>
+            </form>
+        </div>
 
-    window.deleteOrder = function(key) {
-        remove(ref(db, 'orders/' + key));
-    };
-</script>
-    <script src="./dashboard.js"></script>
+        <div class="menu-list-panel">
+            <h2>Database Menu</h2>
+            <div id="adminMenuList">
+                <p style="color: var(--text-muted);">Loading menu...</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="alert-banner" id="alertBanner"></div>
+    <div class="orders-grid" id="ordersGrid"></div>
+    <div id="printArea"></div>
+    
+    <script type="module" src="./dashboard.js"></script>
 </body>
 </html>

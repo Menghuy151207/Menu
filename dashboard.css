@@ -6,202 +6,216 @@
     --primary: #E64A19;
     --primary-hover: #BF360C;
 }
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-}
-body {
-    background: var(--bg);
-    color: var(--text-main);
-    padding: 20px;
-}
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-bottom: 20px;
-    border-bottom: 1px solid #3A302C;
-    margin-bottom: 25px;
-}
-h1 {
-    font-size: 1.6rem;
-}
-h1 span {
-    color: var(--primary);
-}
-.live-status {
-    background: rgba(230, 74, 25, 0.15);
-    color: var(--primary);
-    padding: 6px 14px;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    font-weight: bold;
-    border: 1px solid rgba(230, 74, 25, 0.3);
-}
-.alert-banner {
-    background: var(--primary);
-    color: white;
-    text-align: center;
-    padding: 15px;
-    border-radius: 8px;
-    font-weight: bold;
-    margin-bottom: 25px;
-    display: none;
-    animation: pop 0.3s ease-out;
-}
-@keyframes pop {
-    0% { transform: scale(0.9); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
-}
-.orders-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 20px;
-}
-@media(min-width: 600px) {
-    .orders-grid { grid-template-columns: repeat(2, 1fr); }
-}
-@media(min-width: 900px) {
-    .orders-grid { grid-template-columns: repeat(3, 1fr); }
-}
-.order-card {
-    background: var(--surface);
-    border-radius: 12px;
-    padding: 20px;
-    border-top: 4px solid var(--primary);
-    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-}
-.order-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #3A302C;
-    padding-bottom: 12px;
-    margin-bottom: 12px;
-}
-.order-id {
-    font-weight: 800;
-    font-size: 1.2rem;
-}
-.order-time {
-    color: var(--text-muted);
-    font-size: 0.9rem;
-}
-.item-row {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
-    font-size: 1.05rem;
-}
-.item-qty {
-    color: var(--primary);
-    font-weight: bold;
-    margin-right: 10px;
-}
-.order-total {
-    margin-top: 20px;
-    padding-top: 15px;
-    border-top: 1px dashed #4A3F3A;
-    display: flex;
-    justify-content: space-between;
-    font-weight: 800;
-    font-size: 1.3rem;
-    color: white;
-}
-.action-buttons {
-    display: flex;
-    gap: 10px;
-    margin-top: 20px;
-}
-.btn {
-    flex: 1;
-    padding: 12px;
-    border-radius: 6px;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.2s;
-    text-align: center;
-    border: none;
-}
-.btn-print {
-    background: #3A302C;
-    color: white;
-}
-.btn-print:hover {
-    background: #4A3F3A;
-}
-.btn-done {
-    background: transparent;
-    border: 1px solid var(--primary);
-    color: var(--primary);
-}
-.btn-done:hover {
-    background: var(--primary);
-    color: white;
-}
-.empty-state {
-    text-align: center;
-    color: var(--text-muted);
-    padding: 50px 20px;
-    font-size: 1.1rem;
-    grid-column: 1 / -1;
-}
-#printArea {
-    display: none;
+
+/* -------------------------------------------
+   GLOBAL & BASE STYLES
+------------------------------------------- */
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; 
 }
 
+body { 
+    background: var(--bg); 
+    color: var(--text-main); 
+    padding: 20px; 
+}
+
+header { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    padding-bottom: 20px; 
+    border-bottom: 1px solid #3A302C; 
+    margin-bottom: 25px; 
+}
+
+h1 { font-size: 1.6rem; }
+h1 span { color: var(--primary); }
+
+.live-status { 
+    background: rgba(230, 74, 25, 0.15); 
+    color: var(--primary); 
+    padding: 6px 14px; 
+    border-radius: 20px; 
+    font-size: 0.85rem; 
+    font-weight: bold; 
+    border: 1px solid rgba(230, 74, 25, 0.3); 
+}
+
+/* -------------------------------------------
+   PREMIUM ADMIN CONTROLS STYLING
+------------------------------------------- */
+.admin-controls { 
+    display: grid; 
+    /* UPDATED: Automatically adjust to fit 3 panels */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+    gap: 24px; 
+    margin-bottom: 30px; 
+}
+
+.stats-panel, 
+.menu-panel,
+.menu-list-panel { 
+    background: linear-gradient(145deg, #2C2420, #221B18); 
+    padding: 24px; 
+    border-radius: 16px; 
+    box-shadow: 0 8px 25px rgba(0,0,0,0.4); 
+    border: 1px solid #3A302C; 
+}
+
+/* Menu List Specific Styles */
+.menu-list-panel {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.stats-panel h2, 
+.menu-panel h2,
+.menu-list-panel h2 { 
+    margin-bottom: 20px; 
+    color: var(--primary); 
+    font-size: 1.3rem; 
+    border-bottom: 1px solid #3A302C; 
+    padding-bottom: 10px; 
+    position: sticky;
+    top: -24px;
+    background: #221B18;
+    z-index: 10;
+}
+
+.stat-box { font-size: 1.1rem; margin-bottom: 15px; color: var(--text-muted); }
+.stat-box span { font-weight: 800; font-size: 1.8rem; color: white; display: block; margin-top: 5px; }
+
+/* -------------------------------------------
+   ADMIN MENU LIST & DELETE BUTTONS
+------------------------------------------- */
+.admin-menu-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px dashed #3A302C;
+}
+
+.admin-menu-item:last-child {
+    border-bottom: none;
+}
+
+.admin-menu-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-menu-name { font-weight: bold; color: white; }
+.admin-menu-price { color: var(--text-muted); font-size: 0.9rem; }
+
+.btn-delete-menu {
+    background: #D32F2F;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+.btn-delete-menu:hover { background: #B71C1C; }
+
+/* -------------------------------------------
+   ENHANCED FORM STYLES
+------------------------------------------- */
+.form-group { margin-bottom: 15px; }
+.form-group input, .form-group select { 
+    width: 100%; padding: 12px 15px; border-radius: 8px; 
+    border: 1px solid #4A3F3A; background: #1A1513; 
+    color: white; font-size: 1rem; transition: all 0.3s ease;
+}
+.form-group input:focus, .form-group select:focus {
+    border-color: var(--primary); outline: none; box-shadow: 0 0 10px rgba(230, 74, 25, 0.2);
+}
+.form-group input::placeholder { color: #6A5B55; }
+.btn-add { 
+    background: linear-gradient(45deg, var(--primary), #FF6E40); color: white; border: none; padding: 14px; width: 100%; 
+    border-radius: 8px; cursor: pointer; font-weight: 800; font-size: 1.05rem; text-transform: uppercase; letter-spacing: 1px;
+    box-shadow: 0 4px 15px rgba(230, 74, 25, 0.4); transition: 0.2s; 
+}
+.btn-add:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(230, 74, 25, 0.6); }
+
+/* -------------------------------------------
+   ALERT BANNER & ORDER CARDS
+------------------------------------------- */
+.alert-banner { 
+    background: #D32F2F; color: white; text-align: center; padding: 16px; border-radius: 12px; font-weight: 800; font-size: 1.2rem;
+    margin-bottom: 25px; display: none; box-shadow: 0 4px 20px rgba(211, 47, 47, 0.4);
+    animation: slideDown 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+}
+@keyframes slideDown { 0% { transform: translateY(-30px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
+
+.orders-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+@media(min-width: 600px) { .orders-grid { grid-template-columns: repeat(2, 1fr); } }
+@media(min-width: 900px) { .orders-grid { grid-template-columns: repeat(3, 1fr); } }
+.order-card { background: var(--surface); border-radius: 12px; padding: 20px; border-top: 4px solid var(--primary); box-shadow: 0 8px 16px rgba(0,0,0,0.2); }
+.order-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #3A302C; padding-bottom: 12px; margin-bottom: 12px; }
+.order-id { font-weight: 800; font-size: 1.2rem; }
+.order-time { color: var(--text-muted); font-size: 0.9rem; }
+.item-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 1.05rem; }
+.item-qty { color: var(--primary); font-weight: bold; margin-right: 10px; }
+.order-total { margin-top: 20px; padding-top: 15px; border-top: 1px dashed #4A3F3A; display: flex; justify-content: space-between; font-weight: 800; font-size: 1.3rem; color: white; }
+.action-buttons { display: flex; gap: 10px; margin-top: 20px; }
+.btn { flex: 1; padding: 12px; border-radius: 6px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: 0.2s; text-align: center; border: none; }
+.btn-print { background: #3A302C; color: white; }
+.btn-print:hover { background: #4A3F3A; }
+.btn-done { background: transparent; border: 1px solid var(--primary); color: var(--primary); }
+.btn-done:hover { background: var(--primary); color: white; }
+
+/* -------------------------------------------
+   PRINT MAGIC
+------------------------------------------- */
+@media screen { #printArea { display: none; } }
 @media print {
-    body * {
-        visibility: hidden;
-    }
-    #printArea, #printArea * {
-        visibility: visible;
-    }
-    #printArea {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 300px;
-        font-family: 'Courier New', Courier, monospace;
-        color: black;
-        background: white;
-        padding: 20px;
-    }
-    .receipt-header {
-        text-align: center;
-        border-bottom: 1px dashed black;
-        padding-bottom: 10px;
-        margin-bottom: 10px;
-    }
-    .receipt-header h2 {
-        margin: 0;
-        font-size: 1.5rem;
-        text-transform: uppercase;
-    }
-    .receipt-meta {
-        font-size: 0.9rem;
-        margin-bottom: 15px;
-    }
-    .receipt-item {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 5px;
-        font-size: 0.9rem;
-    }
-    .receipt-total {
-        border-top: 1px dashed black;
-        margin-top: 10px;
-        padding-top: 10px;
-        font-weight: bold;
-        display: flex;
-        justify-content: space-between;
-    }
-    .receipt-footer {
-        text-align: center;
-        margin-top: 20px;
-        font-size: 0.8rem;
-    }
+    @page { margin: 0; }
+    body { background: white; margin: 0; padding: 0; color: black; }
+    header, .admin-controls, .orders-grid, .alert-banner { display: none !important; }
+    #printArea { display: block !important; width: 80mm; padding: 5mm; font-family: 'Courier New', Courier, monospace; font-size: 14px; line-height: 1.4; }
+    .receipt-center { text-align: center; }
+    .receipt-dashed { border-top: 1px dashed black; margin: 8px 0; }
+    table { width: 100%; border-collapse: collapse; }
+    td { padding: 4px 0; vertical-align: top; }
+}
+/* -------------------------------------------
+   LOGIN OVERLAY STYLES
+------------------------------------------- */
+.login-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: var(--bg);
+    z-index: 9999; /* Keeps it on top of everything */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.4s ease;
+}
+
+.login-box {
+    background: linear-gradient(145deg, #2C2420, #221B18);
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+    border: 1px solid #3A302C;
+    width: 100%;
+    max-width: 400px;
+}
+
+.login-box h2 { color: var(--primary); margin-bottom: 25px; font-size: 1.8rem; text-align: center; }
+.login-error { color: #D32F2F; margin-top: 15px; font-weight: bold; display: none; text-align: center; }
+
+/* Hide the overlay when user is authenticated */
+.login-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
 }
