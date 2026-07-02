@@ -263,10 +263,18 @@ main {
 .cart-overlay.active { opacity: 1; visibility: visible; }
 
 .cart-panel {
-    position: fixed; top: 0; right: -100%; width: 100%; max-width: 420px;
-    height: 100vh; background: var(--surface); transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 1000; display: flex; flex-direction: column;
-    box-shadow: -5px 0 30px rgba(0,0,0,0.1);
+    position: fixed; 
+    top: 0; 
+    bottom: 0;
+    right: -100%; 
+    width: 100%; 
+    max-width: 420px;
+    background: var(--surface); 
+    transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+    z-index: 1000; 
+    display: flex; 
+    flex-direction: column; 
+    box-shadow: -5px 0 30px rgba(0,0,0,0.1); 
 }
 .cart-panel.open { right: 0; }
 
@@ -287,7 +295,13 @@ main {
 }
 .qty-controls button { background: none; border: none; font-size: 1.2rem; cursor: pointer; font-weight: bold; color: var(--text-dark); }
 
-.cart-footer { padding: 24px; border-top: 1px solid var(--border); background: var(--surface); }
+.cart-footer { 
+    padding: 24px; 
+    /* This special variable protects the button from the iPhone home bar */
+    padding-bottom: calc(24px + env(safe-area-inset-bottom)); 
+    border-top: 1px solid var(--border); 
+    background: var(--surface); 
+}
 .total-row { display: flex; justify-content: space-between; font-size: 1.4rem; font-weight: 800; margin-bottom: 20px; }
 .checkout-btn {
     width: 100%; background: var(--primary); color: white; border: none;
