@@ -168,53 +168,118 @@ window.updateCart = function() {
 }
 
 // -----------------------------------------------------
-// CHECKOUT LOGIC (2-DIGIT TABLE NUMBER)
+// CHECKOUT LOGIC (GPS VERIFICATION & TABLE NUMBER)
 // -----------------------------------------------------
+
+// CHANGE THESE TO YOUR CAFE'S EXACT COORDINATES
+const CAFE_LAT = 11.5717; 
+const CAFE_LNG = 104.8931; 
+const MAX_DISTANCE_METERS = 150; // Customer must be within 150 meters
+
+// Haversine formula to calculate distance between two GPS coordinates
+function getDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371e3; // Earth radius in meters
+    const φ1 = lat1 * Math.PI/180;
+    const φ2 = lat2 * Math.PI/180;
+    const Δφ = (lat2-lat1) * Math.PI/180;
+    const Δλ = (lon2-lon1) * Math.PI/180;
+
+    const a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
+              Math.cos(φ1) * Math.cos(φ2) *
+              Math.sin(Δλ/2) * Math.sin(Δλ/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return R * c; 
+}
+
 document.getElementById('btnCheckout').addEventListener('click', () => {
-    
     if (window.cart.length === 0) {
         return alert("Cart is empty!");
     }
-    
-    let tableNumber = prompt("Enter your Table Number:");
-    if (tableNumber === null) return;
 
-    while (!/^\d{1,2}$/.test(tableNumber)) {
-        tableNumber = prompt("Invalid input! Please enter a valid Table Number using numbers only (e.g., 5 or 12):");
-        if (tableNumber === null) return;
+    if (!navigator.geolocation) {
+        return alert("Location services are not supported by your browser. Please order at the counter.");
     }
 
-    const rawTotal = document.getElementById('cartTotal').innerText;
-    const totalValue = parseFloat(rawTotal.replace('$', ''));
+    // UI Loading State
+    const btn = document.getElementById('btnCheckout');
+    const originalText = btn.innerText;
+    btn.innerText = "Verifying Location...";
+    btn.disabled = true;
+    btn.style.opacity = "0.7";
 
-    const newOrder = {
-        id: "ORD-" + Math.floor(Math.random() * 9000 + 1000),
-        customer: tableNumber, 
-        items: window.cart.map(i => {
-            return { 
-                name: i.name, 
-                qty: i.qty, 
-                price: i.price 
+    // Request GPS Location
+    navigator.geolocation.getCurrentPosition(
+        (position) => {
+            const userLat = position.coords.latitude;
+            const userLng = position.coords.longitude;
+            const distance = getDistance(userLat, userLng, CAFE_LAT, CAFE_LNG);
+
+            // Check if customer is outside the allowed radius
+            if (distance > MAX_DISTANCE_METERS) {
+                btn.innerText = originalText;
+                btn.disabled = false;
+                btn.style.opacity = "1";
+                return alert(`You must be at the One Shot cafe to order! (You are currently ${Math.round(distance)} meters away)`);
+            }
+
+            // Location is verified, proceed to table number prompt
+            let tableNumber = prompt("Location verified! ✅\nEnter your Table Number:");
+            if (tableNumber === null) {
+                btn.innerText = originalText;
+                btn.disabled = false;
+                btn.style.opacity = "1";
+                return;
+            }
+
+            while (!/^\d{1,2}$/.test(tableNumber)) {
+                tableNumber = prompt("Invalid input! Please enter a valid Table Number using numbers only (e.g., 5 or 12):");
+                if (tableNumber === null) {
+                    btn.innerText = originalText;
+                    btn.disabled = false;
+                    btn.style.opacity = "1";
+                    return;
+                }
+            }
+
+            const rawTotal = document.getElementById('cartTotal').innerText;
+            const totalValue = parseFloat(rawTotal.replace('$', ''));
+
+            const newOrder = {
+                id: "ORD-" + Math.floor(Math.random() * 9000 + 1000),
+                customer: tableNumber, 
+                items: window.cart.map(i => ({ name: i.name, qty: i.qty, price: i.price })),
+                total: totalValue,
+                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
             };
-        }),
-        total: totalValue,
-        time: new Date().toLocaleTimeString([], { 
-            hour: '2-digit', 
-            minute: '2-digit' 
-        })
-    };
 
-    push(ref(db, 'orders/'), newOrder)
-        .then(() => {
-            alert(`Order for Table ${tableNumber} success!`);
-            window.cart.length = 0; 
-            window.updateCart();
-            window.toggleCart();
-        })
-        .catch(err => {
-            alert("Error: " + err);
-        });
+            push(ref(db, 'orders/'), newOrder)
+                .then(() => {
+                    alert(`Order for Table ${tableNumber} sent to the kitchen!`);
+                    window.cart.length = 0; 
+                    window.updateCart();
+                    window.toggleCart();
+                })
+                .catch(err => {
+                    alert("Error: " + err);
+                })
+                .finally(() => {
+                    btn.innerText = originalText;
+                    btn.disabled = false;
+                    btn.style.opacity = "1";
+                });
+        },
+        (error) => {
+            btn.innerText = originalText;
+            btn.disabled = false;
+            btn.style.opacity = "1";
+            
+            // Handle specific GPS errors
+            if (error.code === error.PERMISSION_DENIED) {
+                alert("Please allow location permissions in your browser settings to place an order.");
+            } else {
+                alert("Could not detect your location. Please try again or order at the counter.");
+            }
+        },
+        { enableHighAccuracy: true, timeout: 10000 }
+    );
 });
-
-// Initial render (Will show "No items available" until Firebase loads)
-window.renderMenu(window.menuData);

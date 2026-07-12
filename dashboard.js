@@ -198,6 +198,59 @@ function loadDashboardData() {
         });
     }
 
+    // Add this above your Add Menu Item logic
+const itemImgInput = document.getElementById('itemImg');
+const fileNameDisplay = document.getElementById('fileName');
+const imgPreview = document.getElementById('imgPreview');
+const previewImage = document.getElementById('previewImage');
+let currentBase64Image = "";
+
+if (itemImgInput) {
+    itemImgInput.addEventListener('change', function() {
+        const file = this.files[0];
+        if (file) {
+            fileNameDisplay.textContent = file.name;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                currentBase64Image = e.target.result;
+                previewImage.src = currentBase64Image;
+                imgPreview.style.display = 'block';
+            }
+            reader.readAsDataURL(file); // Converts image to Base64
+        } else {
+            fileNameDisplay.textContent = 'Choose an image from gallery...';
+            currentBase64Image = "";
+            imgPreview.style.display = 'none';
+        }
+    });
+}
+
+// Update the existing addMenuForm listener:
+const addMenuForm = document.getElementById('addMenuForm');
+if (addMenuForm) {
+    addMenuForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const newItem = {
+            name: document.getElementById('itemName').value,
+            price: parseFloat(document.getElementById('itemPrice').value),
+            img: currentBase64Image, // UPDATED: Uses the uploaded image data
+            category: document.getElementById('itemCategory').value
+        };
+
+        push(ref(db, 'menu/'), newItem)
+            .then(() => {
+                alert("Menu item added successfully to Firebase!");
+                document.getElementById('addMenuForm').reset();
+                // Reset image UI
+                fileNameDisplay.textContent = 'Choose an image from gallery...';
+                currentBase64Image = "";
+                imgPreview.style.display = 'none';
+            })
+            .catch(err => {
+                alert("Error adding item: " + err);
+            });
+    });
+}
     // 3. ADD MENU ITEM LOGIC
     const addMenuForm = document.getElementById('addMenuForm');
     if (addMenuForm) {

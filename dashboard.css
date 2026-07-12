@@ -219,3 +219,22 @@ h1 span { color: var(--primary); }
     pointer-events: none;
     visibility: hidden;
 }
+/* Add to ENHANCED FORM STYLES */
+.file-upload-label {
+    display: block; 
+    width: 100%; 
+    padding: 12px 15px; 
+    border-radius: 8px; 
+    border: 1px dashed #4A3F3A; 
+    background: #1A1513; 
+    color: #A6958A; 
+    font-size: 1rem; 
+    text-align: center; 
+    cursor: pointer; 
+    transition: all 0.3s ease;
+}
+.file-upload-label:hover {
+    border-color: var(--primary); 
+    color: white; 
+    background: rgba(230, 74, 25, 0.05);
+}
